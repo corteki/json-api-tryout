@@ -1,6 +1,5 @@
 import { Serializer } from "jsonapi-serializer";
-import { Product, ISerializer } from "../../core";
-import { Serialized } from "../../core/shared/Serialized";
+import { Product, ISerializer, Serialized } from "../../core";
 
 export class ProductsSerializer extends Serializer implements ISerializer<Array<Product>> {
 
