@@ -1,7 +1,11 @@
 import {Router} from "express";
 import { ProductsController } from "./ProductsController";
+import { ProductsSerializer } from "./ProductsSerializer";
 
 export const ProductsRouter = Router();
 
-ProductsRouter.get("/", ProductsController.getAll);
-ProductsRouter.get("/:productId", ProductsController.getById);
+const productsSerializer = new ProductsSerializer();
+const productsController = new ProductsController(productsSerializer);
+
+ProductsRouter.get("/", productsController.getAll);
+ProductsRouter.get("/:productId", productsController.getById);
