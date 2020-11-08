@@ -13,11 +13,9 @@ export class ProductsController {
       const productsRepository = getRepository(Product);
       const products = await productsRepository.find()
       const serializedProducts = this.serializer.serializeProducts(products)
-      res.send(serializedProducts);
-      res.end();
+      return res.status(200).json(serializedProducts);
     } catch ({message}) {
-      res.send(message);
-      res.end();
+      return res.status(500).json({errors: [{ msg: message}]});
     }
   }
 
@@ -28,38 +26,23 @@ export class ProductsController {
       const product = await productsRepository.findOne(productId);
       if(product) {
         const serializedProduct = this.serializer.serializeProduct(product)
-        serializedProduct ? res.send(serializedProduct) : res.status(404);
-      } else {
-        res.status(404)
-      }
-      res.end();
+        return serializedProduct ? res.status(200).json(serializedProduct) : res.status(404);
+      } 
+      return res.status(404);
     } catch ({message}) {
-      res.send(message);
-      res.end();
+      return res.status(500).json({errors: [{ msg: message}]});
     }
   }
 
   add = async (req: Request, res: Response) => {
     try {
       const {name, sku} = req.body;
-      const errors = validationResult(req);
       const productsRepository = getRepository(Product);
-      
-      if(!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
-      }
-
-      if(name && sku) {
-        const product = productsRepository.create({name, sku});
-        const result = await productsRepository.save(product);
-        result ? res.status(201) : res.status(500);
-      } else {
-        res.status(400);
-      }
-      res.end();
+      const product = productsRepository.create({name, sku});
+      const result = await productsRepository.save(product);
+      return result ? res.status(201) : res.status(500);
     } catch ({message}) {
-      res.send(message);
-      res.end();
+      return res.status(500).json({errors: [{ msg: message}]});
     }
   }
 
@@ -69,16 +52,12 @@ export class ProductsController {
       const productsRepository = getRepository(Product);
       const productToDelete = await productsRepository.findOne(productId);
       if(productToDelete) {
-        const result = await productsRepository.remove(productToDelete);
-        console.log(productToDelete)
-        result && res.status(410);
-      } else {
-        res.status(404);
-      }
-      res.end();
+        await productsRepository.remove(productToDelete);
+        return res.status(410)
+      } 
+      return res.status(404);
     } catch ({message}) {
-      res.send(message);
-      res.end;
+      return res.status(500).json({errors: [{ msg: message}]});
     }
   }
 }
