@@ -7,6 +7,6 @@
   "database": "tryout-db",
   "synchronize": true,
   "entities": [
-    "./src/core/**/entities/**/*.{ts,js}"
+    "./src/application/**/models/**/*.{ts,js}"
   ]
 }

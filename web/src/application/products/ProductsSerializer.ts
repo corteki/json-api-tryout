@@ -1,6 +1,6 @@
 import { Serializer } from "jsonapi-serializer";
 import { Serialized } from "../../core";
-import { Product } from "../../core/products";
+import { Product } from "./models/Product";
 
 export class ProductsSerializer extends Serializer {
 

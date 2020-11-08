@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
-import { Product } from "../../core/products";
+import { ProductsRepository } from "./ProductsRepository";
 import { ProductsSerializer } from "./ProductsSerializer";
 
 export class ProductsController {
@@ -9,8 +8,8 @@ export class ProductsController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const productsRepository = getRepository(Product);
-      const products = await productsRepository.find()
+      const { repository } = res.locals;
+      const products = await (<ProductsRepository>repository).getAllProducts()
       const serializedProducts = this.serializer.serializeProducts(products)
       res.status(200).json(serializedProducts);
     } catch ({message}) {
@@ -20,9 +19,9 @@ export class ProductsController {
 
   getById = async (req: Request, res: Response) => {
     try {
+      const { repository } = res.locals;
       const { productId } = req.params;
-      const productsRepository = getRepository(Product);
-      const product = await productsRepository.findOne(productId);
+      const product = await (<ProductsRepository>repository).getProductById(productId);
       if(product) {
         const serializedProduct = this.serializer.serializeProduct(product)
         serializedProduct ? res.status(200).json(serializedProduct) : res.status(404).end();
@@ -34,12 +33,11 @@ export class ProductsController {
     }
   }
 
-  add = async (req: Request, res: Response) => {
+  create = async (req: Request, res: Response) => {
     try {
+      const { repository } = res.locals;
       const {name, sku} = req.body;
-      const productsRepository = getRepository(Product);
-      const product = productsRepository.create({name, sku});
-      await productsRepository.save(product);
+      await (<ProductsRepository>repository).createProduct(name, sku);
       res.status(201).end();
     } catch ({message}) {
       res.status(500).json({errors: [{ msg: message}]});
@@ -48,17 +46,12 @@ export class ProductsController {
 
   update = async (req: Request, res: Response) => {
     try {
+      const { repository } = res.locals;
       const { productId } = req.params;
       const { name, sku } = req.body;
-      const productsRepository = getRepository(Product);
-      const product = await productsRepository.findOne(productId);
+      const product = await (<ProductsRepository>repository).getProductById(productId);
       if(product) {
-        const updatedProduct = new Product();
-        updatedProduct.id = productId;
-        updatedProduct.name = name ? name : product.name;
-        updatedProduct.sku = sku ? sku : product.sku;
-        !updatedProduct.isEqual(product) ? 
-        await productsRepository.update(productId, updatedProduct) : 
+        await (<ProductsRepository>repository).updateProduct(product, name, sku);
         res.status(204).end();
       } else {
         res.status(404).end();
@@ -70,11 +63,11 @@ export class ProductsController {
 
   delete = async (req: Request, res: Response) => {
     try {
+      const { repository } = res.locals;
       const {productId} = req.params;
-      const productsRepository = getRepository(Product);
-      const productToDelete = await productsRepository.findOne(productId);
+      const productToDelete = await (<ProductsRepository>repository).getProductById(productId);
       if(productToDelete) {
-        await productsRepository.remove(productToDelete);
+        await (<ProductsRepository>repository).deleteProduct(productToDelete);
         res.status(410).end();
       } else {
         res.status(404).end();
