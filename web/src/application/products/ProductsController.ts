@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Product } from "../../core/products";
 import { ProductsSerializer } from "./ProductsSerializer";
+import { validationResult } from "express-validator";
 
 export class ProductsController {
 
@@ -41,12 +42,13 @@ export class ProductsController {
   add = async (req: Request, res: Response) => {
     try {
       const {name, sku} = req.body;
-      
+      const errors = validationResult(req);
       const productsRepository = getRepository(Product);
-      console.log(name);
-      console.log(sku);
       
-      
+      if(!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+      }
+
       if(name && sku) {
         const product = productsRepository.create({name, sku});
         const result = await productsRepository.save(product);
