@@ -6,74 +6,74 @@ export class ProductsController {
 
   constructor(private serializer: ProductsSerializer) {}
 
-  getAll = async (req: Request, res: Response) => {
+  getAll = async (req: Request, {status, locals}: Response) => {
     try {
-      const { repository } = res.locals;
-      const products = await (<ProductsRepository>repository).getAllProducts()
+      const repository: ProductsRepository = locals.repository;
+      const products = await repository.getAllProducts()
       const serializedProducts = this.serializer.serializeProducts(products)
-      res.status(200).json(serializedProducts);
+      status(200).json(serializedProducts);
     } catch ({message}) {
-      res.status(500).json({errors: [{ msg: message}]});
+      status(500).json({errors: [{ msg: message}]});
     }
   }
 
-  getById = async (req: Request, res: Response) => {
+  getById = async (req: Request, {status, locals}: Response) => {
     try {
-      const { repository } = res.locals;
+      const repository: ProductsRepository = locals.repository;
       const { productId } = req.params;
-      const product = await (<ProductsRepository>repository).getProductById(productId);
+      const product = await repository.getProductById(productId);
       if(product) {
         const serializedProduct = this.serializer.serializeProduct(product)
-        serializedProduct ? res.status(200).json(serializedProduct) : res.status(404).end();
+        serializedProduct ? status(200).json(serializedProduct) : status(404).end();
       } else {
-        res.status(404).end();
+        status(404).end();
       }
     } catch ({message}) {
-      res.status(500).json({errors: [{ msg: message}]});
+      status(500).json({errors: [{ msg: message}]});
     }
   }
 
-  create = async (req: Request, res: Response) => {
+  create = async (req: Request, {status, locals}: Response) => {
     try {
-      const { repository } = res.locals;
+      const repository: ProductsRepository = locals.repository;
       const {name, sku} = req.body;
-      await (<ProductsRepository>repository).createProduct(name, sku);
-      res.status(201).end();
+      await repository.createProduct(name, sku);
+      status(201).end();
     } catch ({message}) {
-      res.status(500).json({errors: [{ msg: message}]});
+      status(500).json({errors: [{ msg: message}]});
     }
   }
 
-  update = async (req: Request, res: Response) => {
+  update = async (req: Request, {status, locals}: Response) => {
     try {
-      const { repository } = res.locals;
+      const repository: ProductsRepository = locals.repository;
       const { productId } = req.params;
       const { name, sku } = req.body;
-      const product = await (<ProductsRepository>repository).getProductById(productId);
+      const product = await repository.getProductById(productId);
       if(product) {
-        await (<ProductsRepository>repository).updateProduct(product, name, sku);
-        res.status(204).end();
+        await repository.updateProduct(product, name, sku);
+        status(204).end();
       } else {
-        res.status(404).end();
+        status(404).end();
       }
     } catch ({message}) {
-      res.status(500).json({errors: [{ msg: message}]});
+      status(500).json({errors: [{ msg: message}]});
     }
   }
 
-  delete = async (req: Request, res: Response) => {
+  delete = async (req: Request, {status, locals}: Response) => {
     try {
-      const { repository } = res.locals;
+      const repository: ProductsRepository = locals.repository;
       const {productId} = req.params;
-      const productToDelete = await (<ProductsRepository>repository).getProductById(productId);
+      const productToDelete = await repository.getProductById(productId);
       if(productToDelete) {
-        await (<ProductsRepository>repository).deleteProduct(productToDelete);
-        res.status(410).end();
+        await repository.deleteProduct(productToDelete);
+        status(410).end();
       } else {
-        res.status(404).end();
+        status(404).end();
       }
     } catch ({message}) {
-      res.status(500).json({errors: [{ msg: message}]});
+      status(500).json({errors: [{ msg: message}]});
     }
   }
 }
