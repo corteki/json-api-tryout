@@ -1,16 +1,21 @@
 {
   "compilerOptions": {
-    "target": "es5",                          
+    "target": "es6",                          
     "module": "commonjs",                     
     "lib": ["es6"],                           
     "allowJs": true,                          
     "outDir": "build",                        
-    "rootDir": "src",                         
+    "rootDir": ".",                         
     "strict": true,                           
     "noImplicitAny": true,                    
-    "esModuleInterop": true,                  
+    "esModuleInterop": true,    
+    "moduleResolution": "node",              
     "resolveJsonModule": true,                
     "skipLibCheck": true,                     
-    "forceConsistentCasingInFileNames": true  
-  }
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false
+  },
+  "exclude": ["node_modules"]
 }

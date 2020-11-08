@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5000:5432
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  # web:
+  #   image: json-api-tryout
+  #   ports:
+  #     - 3000:3000
