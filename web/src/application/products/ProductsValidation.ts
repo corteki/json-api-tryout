@@ -22,5 +22,19 @@ export class ProductsValidation {
       .withMessage(ProductsValidation.INVALID_NAME_MESSAGE)
     ]);
   }
+
+  static verifyUpdatedData() {
+    return DataManager.validate([
+      body("sku").optional().isLength({
+        min: ProductsValidation.MINIMUM_SKU_LENGTH
+      })
+      .withMessage(ProductsValidation.INVALID_SKU_MESSAGE),
+      body("name").optional().isLength({
+        min:  ProductsValidation.MINIMUM_NAME_LENGTH,
+        max: ProductsValidation.MAXIMUM_NAME_LENGTH
+      })
+      .withMessage(ProductsValidation.INVALID_NAME_MESSAGE)
+    ]);
+  }
   
 }

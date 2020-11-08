@@ -4,7 +4,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 export class Product {
 
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Column()
   sku: string;
@@ -12,4 +12,10 @@ export class Product {
   @Column()
   name: string;
   
+  isEqual(other: Product) {
+    const hasSameId = this.id === other.id;
+    const hasSameSku = this.sku === other.sku;
+    const hasSameName = this.name === other.name;
+    return hasSameId && hasSameSku && hasSameName;
+  }
 }

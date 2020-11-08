@@ -11,4 +11,5 @@ const productsController = new ProductsController(productsSerializer);
 ProductsRouter.get("/", productsController.getAll);
 ProductsRouter.post("/", ProductsValidation.verifyPostedData(), productsController.add);
 ProductsRouter.get("/:productId", productsController.getById);
+ProductsRouter.put("/:productId", ProductsValidation.verifyUpdatedData(), productsController.update);
 ProductsRouter.delete("/:productId", productsController.delete);
