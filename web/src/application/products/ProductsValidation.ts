@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { DataManager } from "../shared/DataManager";
 
 export class ProductsValidation {
@@ -25,6 +25,7 @@ export class ProductsValidation {
 
   static verifyUpdatedData() {
     return DataManager.validate([
+      param("productId").isUUID(),
       body("sku").optional().isLength({
         min: ProductsValidation.MINIMUM_SKU_LENGTH
       })
@@ -36,5 +37,5 @@ export class ProductsValidation {
       .withMessage(ProductsValidation.INVALID_NAME_MESSAGE)
     ]);
   }
-  
+
 }
