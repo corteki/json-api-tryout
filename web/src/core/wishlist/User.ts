@@ -23,8 +23,9 @@ export class User {
     this.votesLeft--;
   }
 
-  createWishlist(name: string, votesPerUser: number): Wishlist {
+  createWishlist(name: string, votesPerUser: number, expiresAfter: number): Wishlist {
     const wishlist = new Wishlist(name, votesPerUser);
+    wishlist.setExpiryDate(expiresAfter);
     wishlist.creator = this;
     this.votesLeft = wishlist.votesPerUser;
     this.wishlist = wishlist;

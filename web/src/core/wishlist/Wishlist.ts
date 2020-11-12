@@ -4,8 +4,8 @@ import { WishlistItem } from "./WishlistItem";
 export class Wishlist {
   id: string;
   creator: User;
-  createdOn: Date;
-  expiresOn: Date;
+  createdOn = new Date();
+  expiresOn = new Date();
   wishlistItems: Array<WishlistItem> = [];
   participants: Array<User> = [];
 
@@ -29,4 +29,9 @@ export class Wishlist {
       this.participants.push(participant);
     }
   }
+
+  setExpiryDate(expiresAfter: number) {
+    this.expiresOn.setDate(this.createdOn.getDate() + expiresAfter)
+  }
+
 }

@@ -14,7 +14,7 @@ export const app = express();
 
 const creator = new User("a", "Tim", "Alaerts");
 const participant = new User("b", "Test", "User");
-const wishlist = creator.createWishlist("test-list", 5);
+const wishlist = creator.createWishlist("test-list", 5, 3);
 const firstItemImage = new Image("/xs-image.jpeg", "/sm-image.jpeg", "m-image.jpeg", "l-image.jpeg");
 const firstItem = new WishlistItem("def-1", firstItemImage, "test item", "5 euro");
 
