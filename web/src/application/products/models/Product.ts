@@ -7,14 +7,14 @@ export class Product {
   id: string;
 
   @Column()
-  sku: string;
+  description: string;
 
   @Column()
   name: string;
   
   isEqual(other: Product) {
     const hasSameId = this.id === other.id;
-    const hasSameSku = this.sku === other.sku;
+    const hasSameSku = this.description === other.description;
     const hasSameName = this.name === other.name;
     return hasSameId && hasSameSku && hasSameName;
   }

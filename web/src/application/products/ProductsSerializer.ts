@@ -6,7 +6,7 @@ export class ProductsSerializer extends Serializer {
 
   constructor() {
     super('products', {
-      attributes: ["sku", "name"]
+      attributes: ["description", "name"]
     });
   }
 

@@ -2,6 +2,7 @@ export interface SerializedProduct {
   type: string;
   id: string;
   attributes: {
-    sku: string;
+    name: string;
+    description: string;
   }
 }

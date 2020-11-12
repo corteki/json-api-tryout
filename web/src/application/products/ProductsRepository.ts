@@ -14,18 +14,18 @@ export class ProductsRepository {
     return this.manager.findOne(Product, productId);
   }
 
-  createProduct(name: string, sku: string) {
+  createProduct(name: string, description: string) {
     const product = new Product();
     product.name = name;
-    product.sku = sku;
+    product.description = description;
     return this.manager.save(product);
   }
 
-  updateProduct(product: Product, name: string, sku: string) {
+  updateProduct(product: Product, name: string, description: string) {
       const updatedProduct = new Product();
       updatedProduct.id = product.id;
       updatedProduct.name = name ? name : product.name;
-      updatedProduct.sku = sku ? sku : product.sku;
+      updatedProduct.description = description ? description : product.description;
       return this.manager.update(Product, product.id, updatedProduct);
   }
 
